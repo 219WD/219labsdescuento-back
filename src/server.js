@@ -15,9 +15,19 @@ mongoose.connect(process.env.MONGO_URI || "mongodb+srv://kaspercanepa:TJae7gqBnS
 
 const server = express();
 
-// Configurar CORS solo una vez con opciones
+// Configurar CORS para permitir tanto localhost como el dominio en producción
 const corsOptions = {
-  origin: ['https://219labs-descuento.vercel.app'], // Cambia según el dominio frontend
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://219labs-descuento.vercel.app', // Dominio en producción
+      'http://localhost:5173',              // Localhost para desarrollo
+    ];
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origen no permitido por CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 };
