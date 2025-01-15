@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const emailRouter = require("./router/emailRouter");
 
 // Configuración de la base de datos
-mongoose.connect(process.env.MONGO_URI || "mongodb+srv://kaspercanepa:TJae7gqBnSlQF3II@219emails.w0gev.mongodb.net/?retryWrites=true&w=majority&appName=219Emails", {
+mongoose.connect(process.env.MONGO_URI || "mongodb+srv://kaspercanepa:TJae7gqBnSlQF3II@219emails.w0gev.mongodb.net/", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
