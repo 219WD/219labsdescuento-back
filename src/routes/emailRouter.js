@@ -4,7 +4,7 @@ const Email = require("../models/Email");
 const emailRouter = Router();
 
 // Ruta para guardar los emails
-emailRouter.post("/descuento/guardar-email", async (req, res) => {
+emailRouter.post("/guardar-email", async (req, res) => {
   const { email } = req.body;
 
   // Verificar que el email sea válido
@@ -24,7 +24,7 @@ emailRouter.post("/descuento/guardar-email", async (req, res) => {
 });
 
 // Ruta para obtener todos los emails
-emailRouter.get("/descuento/emails", async (req, res) => {
+emailRouter.get("/emails", async (req, res) => {
   try {
     const emails = await Email.find();
     return res.json(emails);
@@ -35,7 +35,7 @@ emailRouter.get("/descuento/emails", async (req, res) => {
 });
 
 // Ruta para actualizar un email
-emailRouter.put("/descuento/actualizar-email/:id", async (req, res) => {
+emailRouter.put("/actualizar-email/:id", async (req, res) => {
   const { id } = req.params;
   const { email } = req.body;
 
@@ -57,7 +57,7 @@ emailRouter.put("/descuento/actualizar-email/:id", async (req, res) => {
 });
 
 // Ruta para eliminar un email
-emailRouter.delete("/descuento/eliminar-email/:id", async (req, res) => {
+emailRouter.delete("/eliminar-email/:id", async (req, res) => {
   const { id } = req.params;
 
   try {

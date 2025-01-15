@@ -20,14 +20,15 @@ server.use(express.json());
 server.use(cors());
 
 // Usar el router de email en la ruta específica
-server.use("/", emailRouter); // Usa la ruta raíz para las rutas del email
+server.use("/descuento", emailRouter);
 
 // Configuración de CORS
 const corsOptions = {
-  origin: ['https://219labs-descuento.vercel.app'], // Dominios permitidos
+  origin: ['https://219labs-descuento.vercel.app'], // Cambia según el dominio frontend
   methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
 };
-
 server.use(cors(corsOptions));
+server.use(express.json());
 
 module.exports = server; // Exportar el servidor para que pueda ser usado en index.js
