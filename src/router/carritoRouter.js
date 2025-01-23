@@ -59,7 +59,6 @@ carritoRouter.get("/:usuarioId", async (req, res) => {
 });
 
 // Actualizar la cantidad de un producto en el carrito
-// Actualizar la cantidad de un producto en el carrito
 carritoRouter.put("/actualizar/:usuarioId/:productoId", async (req, res) => {
     const { usuarioId, productoId } = req.params;
     const { cantidad } = req.body;
@@ -156,6 +155,73 @@ carritoRouter.delete("/limpiar/:usuarioId", async (req, res) => {
     } catch (error) {
         console.error("Error al limpiar el carrito:", error);
         res.status(500).json({ error: "Hubo un error al limpiar el carrito" });
+    }
+});
+
+
+// Consultar carritos por estado
+carritoRouter.get("/estado/:estado", async (req, res) => {
+    const { estado } = req.params;
+
+    try {
+        const validEstados = ["contactado", "pendiente", "cerrado"];
+        if (!validEstados.includes(estado)) {
+            return res.status(400).json({ mensaje: "Estado inválido." });
+        }
+
+        const carritos = await Carrito.find({ estado }).populate("productos.productoId");
+        res.status(200).json(carritos);
+    } catch (error) {
+        console.error("Error al obtener carritos:", error);
+        res.status(500).json({ mensaje: "Error al obtener los carritos." });
+    }
+});
+
+// Actualizar estado del carrito
+carritoRouter.put("/estado/:usuarioId", async (req, res) => {
+    const { usuarioId } = req.params;
+    const { estado } = req.body;
+
+    try {
+        const validEstados = ["contactado", "pendiente", "cerrado"];
+        if (!validEstados.includes(estado)) {
+            return res.status(400).json({ error: "Estado inválido" });
+        }
+
+        const carrito = await Carrito.findOne({ usuarioId });
+        if (!carrito) return res.status(404).json({ error: "Carrito no encontrado" });
+
+        carrito.estado = estado;
+        await carrito.save();
+
+        res.status(200).json({ message: "Estado actualizado", carrito });
+    } catch (error) {
+        console.error("Error al actualizar estado del carrito:", error);
+        res.status(500).json({ error: "Error al actualizar el estado del carrito" });
+    }
+});
+
+// Actualizar forma de pago del carrito
+carritoRouter.put("/formaPago/:usuarioId", async (req, res) => {
+    const { usuarioId } = req.params;
+    const { formaDePago } = req.body;
+
+    try {
+        const validFormasPago = ["efectivo", "transferencia", "mercadopago"];
+        if (!validFormasPago.includes(formaDePago)) {
+            return res.status(400).json({ error: "Estado inválido" });
+        }
+
+        const carrito = await Carrito.findOne({ usuarioId });
+        if (!carrito) return res.status(404).json({ error: "Carrito no encontrado" });
+
+        carrito.formaDePago = formaDePago;
+        await carrito.save();
+
+        res.status(200).json({ message: "Forma de Pago actualizada", carrito });
+    } catch (error) {
+        console.error("Error al actualizar la forma de Pago del carrito:", error);
+        res.status(500).json({ error: "Error al actualizar la forma de Pago del carrito" });
     }
 });
 
