@@ -2,6 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const emailRouter = require("./router/emailRouter");
+const carritoRouter = require("./router/carritoRouter");
+const productoRouter = require("./router/productoRouter");
+const { loginRouter } = require("./router/login");
+const passport = require("passport");
+require("./config/passport");
+require('dotenv').config();
 
 // Configuración de la base de datos
 mongoose.connect(process.env.MONGO_URI || "mongodb+srv://kaspercanepa:TJae7gqBnSlQF3II@219emails.w0gev.mongodb.net/", {
@@ -34,8 +40,12 @@ const corsOptions = {
 
 server.use(cors(corsOptions)); // Aplica CORS de forma específica
 server.use(express.json()); // Habilita JSON en las solicitudes entrantes
+server.use(passport.initialize());
 
 // Usar el router de email en la ruta específica
 server.use("/descuento", emailRouter);
+server.use("/carrito", carritoRouter);
+server.use("/productos", productoRouter);
+server.use("/auth", loginRouter);
 
 module.exports = server; // Exportar el servidor para que pueda ser usado en index.js
