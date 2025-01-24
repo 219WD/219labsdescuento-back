@@ -87,4 +87,31 @@ productoRouter.delete("/eliminar/:id", async (req, res) => {
   }
 });
 
+// Actualizar estado de un producto
+productoRouter.put("/actualizarEstado/:id", async (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body;
+
+  // Validar estado recibido
+  if (!["activo", "inactivo"].includes(estado)) {
+    return res.status(400).json({ error: "Estado inválido. Debe ser 'activo' o 'inactivo'." });
+  }
+
+  try {
+    const producto = await Producto.findByIdAndUpdate(
+      id,
+      { estado },
+      { new: true } // Devuelve el documento actualizado
+    );
+    if (!producto) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+    res.status(200).json({ message: "Estado actualizado correctamente", producto });
+  } catch (error) {
+    console.error("Error al actualizar el estado del producto:", error);
+    res.status(500).json({ error: "No se pudo actualizar el estado del producto" });
+  }
+});
+
+
 module.exports = productoRouter;

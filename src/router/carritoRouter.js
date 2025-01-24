@@ -43,6 +43,26 @@ carritoRouter.post("/agregar", async (req, res) => {
     }
 });
 
+
+// Obtener el carritos
+carritoRouter.get("/verCarritos", async (req, res) => {
+    try {
+        // Obtener todos los carritos
+        const carritos = await Carrito.find().populate("productos.productoId");
+
+        // Verificar si hay carritos
+        if (!carritos || carritos.length === 0) {
+            return res.status(404).json({ message: "No se encontraron carritos" });
+        }
+
+        // Responder con los carritos encontrados
+        res.status(200).json(carritos);
+    } catch (error) {
+        console.error("Error al obtener los carritos:", error);
+        res.status(500).json({ error: "Hubo un error al obtener los carritos" });
+    }
+});
+
 // Obtener el carrito del usuario
 carritoRouter.get("/:usuarioId", async (req, res) => {
     const { usuarioId } = req.params;
