@@ -1,29 +1,28 @@
 const { Router } = require("express");
 const Email = require("../models/Email");
+const { sendMassEmail } = require("../controllers/emailMarketing");
 
 const emailRouter = Router();
 
-// Ruta para guardar los emails
+// Ruta para guardar un nuevo email
 emailRouter.post("/guardar-email", async (req, res) => {
   const { email } = req.body;
 
-  // Verificar que el email sea válido
   if (!email || !email.includes("@")) {
     return res.status(400).json({ error: "Correo electrónico inválido." });
   }
 
   try {
-    // Crear un nuevo documento con el email
-    const newEmail = new Email({ email });
+    const newEmail = new Email({ email }); // No enviamos descuento ni suscripcion, se usan los valores por defecto del schema
     await newEmail.save();
-    return res.status(201).json({ message: "Email guardado con éxito" });
+    return res.status(201).json({ message: "Email guardado con éxito", email: newEmail });
   } catch (error) {
     console.error("Error al guardar el email:", error);
     return res.status(500).json({ error: "Hubo un error al guardar el email" });
   }
 });
 
-// Ruta para obtener todos los emails
+// Obtener todos los emails
 emailRouter.get("/emails", async (req, res) => {
   try {
     const emails = await Email.find();
@@ -34,18 +33,17 @@ emailRouter.get("/emails", async (req, res) => {
   }
 });
 
-// Ruta para actualizar un email
+// Actualizar un email (email y suscripción)
 emailRouter.put("/actualizar-email/:id", async (req, res) => {
   const { id } = req.params;
-  const { email } = req.body;
+  const { email, suscripcion } = req.body;
 
-  // Verificar que el email sea válido
-  if (!email || !email.includes("@")) {
+  if (email && !email.includes("@")) {
     return res.status(400).json({ error: "Correo electrónico inválido." });
   }
 
   try {
-    const updatedEmail = await Email.findByIdAndUpdate(id, { email }, { new: true });
+    const updatedEmail = await Email.findByIdAndUpdate(id, { email, suscripcion }, { new: true });
     if (!updatedEmail) {
       return res.status(404).json({ error: "Email no encontrado." });
     }
@@ -56,7 +54,28 @@ emailRouter.put("/actualizar-email/:id", async (req, res) => {
   }
 });
 
-// Ruta para eliminar un email
+// Ruta para actualizar solo la suscripción
+emailRouter.put("/actualizar-suscripcion/:id", async (req, res) => {
+  const { id } = req.params;
+  const { suscripcion } = req.body;
+
+  if (typeof suscripcion !== "boolean") {
+    return res.status(400).json({ error: "Valor de suscripción inválido." });
+  }
+
+  try {
+    const updatedEmail = await Email.findByIdAndUpdate(id, { suscripcion }, { new: true });
+    if (!updatedEmail) {
+      return res.status(404).json({ error: "Email no encontrado." });
+    }
+    return res.status(200).json({ message: "Suscripción actualizada con éxito", email: updatedEmail });
+  } catch (error) {
+    console.error("Error al actualizar la suscripción:", error);
+    return res.status(500).json({ error: "Hubo un error al actualizar la suscripción" });
+  }
+});
+
+// Eliminar un email
 emailRouter.delete("/eliminar-email/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -71,5 +90,7 @@ emailRouter.delete("/eliminar-email/:id", async (req, res) => {
     return res.status(500).json({ error: "Hubo un error al eliminar el email" });
   }
 });
+
+emailRouter.post("/send-mass-email", sendMassEmail);
 
 module.exports = emailRouter;

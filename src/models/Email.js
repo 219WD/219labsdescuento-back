@@ -1,12 +1,20 @@
-// src/models/Email.js
 const mongoose = require("mongoose");
 
 const emailSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // Aseguramos que los emails no se repitan
-    lowercase: true, // Para que todos los emails sean en minúsculas
+    unique: true,
+    lowercase: true,
+  },
+  descuento: {
+    type: String,
+    default: "20%", // Ahora el descuento por defecto es 20%
+  },
+  suscripcion: {
+    type: Boolean,
+    required: true,
+    default: true, // Ahora la suscripción es true por defecto
   },
   createdAt: {
     type: Date,
@@ -15,5 +23,4 @@ const emailSchema = new mongoose.Schema({
 });
 
 const Email = mongoose.model("Email", emailSchema);
-
 module.exports = Email;

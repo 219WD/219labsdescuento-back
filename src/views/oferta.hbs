@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oferta Especial</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #ffffff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ff5733;
+        }
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #ff5733;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Oferta Especial para Ti!</h1>
+        <p>Hola {{name}},</p>
+        <p>Tenemos una oferta increíble para ti. No te pierdas este descuento exclusivo.</p>
+        <p>Haz clic en el botón de abajo para aprovechar esta oportunidad:</p>
+        <a href="{{offer_link}}" class="button">Ver Oferta</a>
+        <p>Si tienes alguna pregunta, contáctanos.</p>
+        <p>Saludos,<br>El equipo de 219Labs</p>
+    </div>
+</body>
+</html>
