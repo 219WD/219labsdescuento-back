@@ -9,7 +9,7 @@ mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN || "",
 });
 
-Mercado_Pago.post("/", async (req, res) => {
+Mercado_Pago.post("/pagar", async (req, res) => {
   const items = req.body;
 
   try {
@@ -28,7 +28,7 @@ Mercado_Pago.post("/", async (req, res) => {
         currency_id: "ARS",
       })),
       back_urls: {
-        success: process.env.SUCCESS_URL || "http://localhost:5173/",
+        success: process.env.SUCCESS_URL || "https://219labs-descuento.vercel.app/",
         failure: process.env.FAILURE_URL || "http://localhost:3000/fallo",
       },
       auto_return: "approved",

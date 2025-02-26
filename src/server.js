@@ -9,6 +9,8 @@ const rateLimit = require("express-rate-limit");
 const passport = require("passport");
 const visitRouter = require("./router/visitRouter");
 const landingRouter = require("./router/landingRoutes");
+const templateRouter = require("./router/templateRoutes");
+const Mercado_Pago = require("./router/Mercado_Pago_Router");
 require("./config/passport");
 require('dotenv').config();
 
@@ -62,5 +64,7 @@ server.use("/productos", productoRouter);
 server.use("/auth", loginRouter);
 server.use("/visitas", visitRouter);
 server.use("/landing", landingRouter);
+server.use("/template", templateRouter);
+server.use("/Mercado_Pago", Mercado_Pago);
 
 module.exports = server; // Exportar el servidor para que pueda ser usado en index.js

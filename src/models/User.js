@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     name: { type: String },
     googleId: { type: String, unique: true },
     createdAt: { type: Date, default: Date.now },
+    emailSubscription: { type: mongoose.Schema.Types.ObjectId, ref: "Email" },
 });
 
 module.exports = mongoose.model("User", UserSchema);
